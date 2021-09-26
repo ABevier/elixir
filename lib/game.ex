@@ -3,49 +3,46 @@ defmodule Game do
   Documentation for `Game`.
   """
 
-  @doc """
-  Hello world.
+  defstruct heroes: []
 
-  ## Examples
-
-      iex> Game.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def create do
+    %Game{
+      heroes: [
+        %Hero{
+          name: "A",
+          position: %Position{x: 1, y: 1},
+          hp: 800
+        },
+        %Hero{
+          name: "B",
+          position: %Position{x: 2, y: 2},
+          hp: 800
+        },
+        %Hero{
+          name: "C",
+          position: %Position{x: 1, y: 3},
+          hp: 800
+        },
+        %Hero{
+          name: "X",
+          position: %Position{x: 7, y: 1},
+          hp: 800
+        },
+        %Hero{
+          name: "Y",
+          position: %Position{x: 6, y: 2},
+          hp: 800
+        },
+        %Hero{
+          name: "Z",
+          position: %Position{x: 7, y: 3},
+          hp: 800
+        },
+      ]
+    }
   end
 
-  def render do
-    board = %{
-      0 => %{ 4 => "X"},
-      3 => %{ 2 => "Y"}
-    }
-
-    header_row = Enum.reduce(0..9, "   ", fn x, acc -> acc <> "#{x} " end)
-
-    str = Enum.reduce(0..5, "", fn y, acc ->
-      # Enum.each 0..9, fn x ->
-      #   val = Map.get(board, y, %{})
-      #   |> Map.get(x, ".")
-
-      #   IO.puts("(#{x},#{y})->#{val}")
-      # end
-
-      row = Enum.reduce(0..9, "#{y}: ", fn x, acc ->
-        val = Map.get(board, y, %{})
-        |> Map.get(x, ".")
-        acc <> "#{val} "
-      end)
-      acc <> row <> "\n"
-    end)
-
-    IO.puts(header_row <> "\n" <> str)
-
-    # Enum.each board, fn {y, row} ->
-    #   Enum.each row, fn {x, val} ->
-    #     IO.puts("(#{x},#{y})->#{val}")
-    #   end
-    # end
+  def find_hero_at(%Game{heroes: heroes}, position) do
+    Enum.find(heroes, nil, fn hero -> hero.position == position end)
   end
 end
