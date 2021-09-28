@@ -3,7 +3,7 @@ defmodule Game.Board do
   # TODO: figure out how these specs work
   # @spec board_from_game(Game) :: Map
   def board_from_game(%Game{} = game) do
-    Enum.reduce(game.heroes, %{}, fn %Hero{name: name, position: pos}, acc ->
+    Enum.reduce(game.heroes, %{}, fn {_, %Hero{name: name, position: pos}}, acc ->
       row = Map.get(acc, pos.y, %{})
       row = Map.put(row, pos.x, name)
       Map.put(acc, pos.y, row)

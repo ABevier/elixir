@@ -1,3 +1,3 @@
 defmodule Hero do
-  defstruct position: nil, name: nil, hp: nil
+  defstruct id: -1, name: nil, position: nil, hp: nil
 end
