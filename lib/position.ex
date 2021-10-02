@@ -22,18 +22,45 @@ defmodule Position do
   end
 
   def find_all_in_range(pos, range, max_x, max_y) do
-    bfs(pos, range, max_x, max_y, MapSet.new())
+    bfs([{pos, range}], max_x, max_y, MapSet.new())
   end
 
-  defp bfs(next, 0, _max_x, _max_y, visited) do
-    MapSet.put(visited, next)
+  # empty list is done
+  defp bfs([], _max_x, _max_y, visited) do
+    visited
   end
 
-  defp bfs(next, range, max_x, max_y, visited) do
-    visited = MapSet.put(visited, next)
-    find_neighbors(next, max_x, max_y)
-    #|> Enum.filter(fn n -> !MapSet.member?(visited, n) end)
-    |> Enum.reduce(visited, fn (elem, acc) -> bfs(elem, range - 1, max_x, max_y, acc) end)
+  # 0 range means visit this tile and move on
+  defp bfs([{pos, 0} | rest], max_x, max_y, visited) do
+    bfs(rest, max_x, max_y, MapSet.put(visited, pos))
   end
+
+  # add all neighbors to the BACK of the list to ensure that higher range
+  # paths are checked first
+  defp bfs([{pos, range} | rest], max_x, max_y, visited) do
+    neighbors = find_neighbors(pos, max_x, max_y)
+    |> Enum.filter(fn n -> !MapSet.member?(visited, n) end)
+    |> Enum.map(fn n -> {n, range - 1 } end)
+
+    bfs(rest ++ neighbors, max_x, max_y, MapSet.put(visited, pos))
+  end
+
+  # this solution doesn't work, the visited tiles block valid paths
+  # using dfs is just bad here
+
+  # def find_all_in_range(pos, range, max_x, max_y) do
+  #   dfs(pos, range, max_x, max_y, MapSet.new())
+  # end
+
+  # defp dfs(next, 0, _max_x, _max_y, visited) do
+  #   MapSet.put(visited, next)
+  # end
+
+  # defp dfs(next, range, max_x, max_y, visited) do
+  #   visited = MapSet.put(visited, next)
+  #   find_neighbors(next, max_x, max_y)
+  #   |> Enum.filter(fn n -> !MapSet.member?(visited, n) end)
+  #   |> Enum.reduce(visited, fn (elem, acc) -> dfs(elem, range - 1, max_x, max_y, acc) end)
+  # end
 
 end
