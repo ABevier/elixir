@@ -5,6 +5,8 @@ defmodule Game do
 
   defstruct heroes: %{}
 
+  # TODO: put this inside of a GenServer so I can store state!
+
   def create do
     # TODO: refactor this...
     %Game{
@@ -49,8 +51,8 @@ defmodule Game do
     }
   end
 
-  # TODO: consider building and caching a collision map instead of iterating
   def find_hero_at(%Game{heroes: heroes}, position) do
+    # TODO: consider building and caching a collision map on the game? instead of iterating
     found = Enum.find(heroes, nil, fn {_, hero} -> hero.position == position end)
     case found do
       {_, hero} -> {:ok, hero}
@@ -72,19 +74,11 @@ defmodule Game do
     end
   end
 
-  #TODO: Consider moving input to Game.Input module?
-  #TODO: figure out this typespec stuff
-  @spec handle_input(%Game{}, %Position{}, %Position{}) :: {:ok, %Game{}} | {:error, String}
-  def handle_input(game, source, dest) do
-    case find_hero_at(game, source) do
-      {:ok, hero} -> hero_handle_input(game, hero, dest)
-      {:error, reason } -> {:error, reason}
-    end
-  end
-
-  @spec handle_input(%Game{}, %Hero{}, %Position{}) :: %Game{} | {:error, String}
-  def hero_handle_input(game, %Hero{} = hero, dest) do
-    move_hero(game, hero.id, dest)
+  def damage_hero(game, id, amount) do
+    hero = game.heroes[id]
+    update_hero = %{game.heroes[id] | hp: hero.hp - amount}
+    new_state = put_in(game.heroes[id], update_hero)
+    {:ok, new_state}
   end
 
 end
