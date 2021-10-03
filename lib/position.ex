@@ -13,6 +13,10 @@ defmodule Position do
     %Position{x: x, y: y}
   end
 
+  def distance_between(%Position{x: x1, y: y1}, %Position{x: x2, y: y2}) do
+    abs(x1 - x2) + abs(y1 - y2)
+  end
+
   def find_neighbors(%Position{x: x, y: y}, max_x, max_y) do
     []
     |> prepend_if(x - 1 >= 0, pos(x - 1, y))

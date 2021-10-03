@@ -16,4 +16,8 @@ defmodule PositionTest do
     assert find_all_in_range(pos(4, 2), 2, 9, 5) == expected
   end
 
+  test "should find distance" do
+    assert distance_between(pos(3, 3), pos(4,2)) == 2
+  end
+
 end
