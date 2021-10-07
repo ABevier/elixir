@@ -39,7 +39,7 @@ defmodule Game.Input do
   def match_attack(game, hero, dest) do
     if can_attack(game, hero, dest) do
       {:ok, target} = Game.find_hero_at(game, dest)
-      {:attack_cmd, fn () -> { damage_hero(game, target.id, 200)} end }
+      {:attack_cmd, fn () -> damage_hero(game, target.id, 200) end }
     else
       nil
     end
